@@ -1,0 +1,52 @@
+// portfolio-copy-constructor-example.cpp : This file contains the 'main' function. Program execution begins and ends there.
+#include <iostream>
+#include <string>
+
+//copy constructor uses:
+//When we pass an object to a function or method by value(default mode).
+//When using a raw pointer we will have a shallow copy & therefore a deep copy constructor will be needed.
+//Using STL classes already provide copy constructors, which is usefull for attribute creation.
+
+class Player {
+private:
+    std::string name;
+    double health;
+    int xp;
+public:
+    std::string get_name() { return name; }
+    double get_health() { return health; }
+    int get_xp() { return xp; }
+    Player(std::string name = "None", double health = 1.0, int xp = 1);
+    Player(const Player& source);        //copy constructor
+    ~Player();
+};
+
+Player::Player(std::string name, double health, int xp) 
+    : name{ name }, health{ health }, xp{ xp } {
+    std::cout << "Three Arguements Constructor being called." << std::endl;
+}
+
+Player::Player(const Player &source)  
+ //   : name{ source.name }, health{ source.health }, xp{ source.xp } {       //initialization
+      : Player(source.name,source.health,source.xp) {                         //delegation
+    std::cout << "Copy Constructor being called - made a copy of " << source.name << std::endl;
+}
+
+Player::~Player() {
+    std::cout << "Destructor being called for " << name << std::endl;
+}
+
+void display_player(Player p) {       //expects the object by value (as this is the default) therefore the Copy Constructor will be called.
+    std::cout << "Name: " << p.get_name() << std::endl;
+    std::cout << "Health: " << p.get_health() << std::endl;
+    std::cout << "XP: " << p.get_xp() << std::endl << std::endl;
+}
+
+int main()
+{
+    Player jenny;
+    display_player(jenny);                       //Copy constructor will be called.
+    Player elizabeth{ "Elizabeth", 10.2, 14 };
+    Player my_new_object(elizabeth);             //Copy constructor will be called
+    return 0;
+}
